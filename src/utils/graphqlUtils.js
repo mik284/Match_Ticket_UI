@@ -19,7 +19,7 @@ export function fetchDataWithUseQuery({ key, query, variables = {} }) {
 export const mutationHandler = async (values, mutationQuery, token = null) => {
   const headers = {
     headers: {
-      authorization: token ? `Bearer ${token}` : `Bearer ${localStorage.getItem('token')}`,
+      authorization: `Bearer ${localStorage.getItem('token')}`,
     },
   };
   const endpoint = `${BASE_URL}`;
