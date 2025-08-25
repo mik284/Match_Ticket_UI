@@ -1,5 +1,5 @@
+import { useQuery } from '@tanstack/react-query';
 import { GraphQLClient } from 'graphql-request';
-import { useQuery } from 'react-query';
 
 export function fetchDataWithUseQuery({ key, query, variables = {} }) {
   const config = { refetchOnWindowFocus: false };
@@ -14,6 +14,7 @@ export function fetchDataWithUseQuery({ key, query, variables = {} }) {
 
   return useQuery(key, async () => await client.request(query, variables), config);
 }
+
 
 // A handler to perform secure mutations with authentication token
 export const mutationHandler = async (values, mutationQuery, token = null) => {
