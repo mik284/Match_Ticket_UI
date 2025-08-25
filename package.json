@@ -20,6 +20,7 @@
     "antd": "^5.24.3",
     "antd-country-phone-input": "^4.5.1",
     "axios": "^1.8.3",
+    "graphql-request": "^7.2.0",
     "html2canvas": "^1.4.1",
     "jspdf": "^3.0.0",
     "jspdf-autotable": "^5.0.2",
