@@ -1,0 +1,66 @@
+import ProTableComponent from '@/components/ProTableComponent';
+import { getAllVenues } from '@/services/venues.api';
+import { EyeOutlined } from '@ant-design/icons';
+import { Link } from '@umijs/max';
+import { Button, Image } from 'antd';
+import AddEditVenue from './components/AddEditVenue';
+
+function Venues() {
+  const columns = [
+    {
+      title: 'Venue',
+      dataIndex: 'imageUrl',
+      key: 'imageUrl',
+      render: (_, record) => (
+        <Image src={record?.imageUrl} alt="Venue" height={100} />
+      ),
+    },
+    { title: 'Venue Name', dataIndex: 'name', key: 'name' },
+    { title: 'City', dataIndex: 'city', key: 'city' },
+    { title: 'Capacity', dataIndex: 'capacity', key: 'capacity' },
+    {
+      title: 'Parking Available',
+      dataIndex: 'parkingAvailable',
+      key: 'parkingAvailable',
+      render: (_, record) => (record?.parkingAvailable ? 'Yes' : 'No'),
+    },
+    {
+      title: 'Actions',
+      key: 'actions',
+      render: (_, record) => (
+        <Link to={`/venues/${record.id}`}>
+          <Button size="small" icon={<EyeOutlined />} type="primary">
+            View
+          </Button>
+        </Link>
+      ),
+    },
+  ];
+
+  return (
+    <ProTableComponent
+      request={async (params) => {
+        try {
+          const data = await getAllVenues(params);
+          return {
+            data: data?.getAllVenues?.venues || [],
+            success: data?.getAllVenues?.success || false,
+            total: data?.getAllVenues?.total || 0,
+          };
+        } catch (e) {
+          console.log(e);
+          return {
+            data: [],
+            success: false,
+            total: 0,
+          };
+        }
+      }}
+      rowKey={'id'}
+      toolBarRender={() => [<AddEditVenue />]}
+      columns={columns}
+    />
+  );
+}
+
+export default Venues;

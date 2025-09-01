@@ -29,7 +29,6 @@ import {
   Space,
   Typography,
 } from 'antd';
-import { RPM_THEME_STORAGE_KEY } from './constants';
 import Loading from './loading';
 import { getUserInfo } from './services/auth.api';
 import { toggleTheme } from './utils/toggleTheme';
@@ -54,24 +53,26 @@ const handleLogout = () => {
 };
 
 export async function getInitialState(): Promise<any> {
+  // history.push('/');
+
   try {
     let token = localStorage.getItem('property_token');
-    if (token) {
-      const userData = await checkIfUserIsValid();
+    // if (token) {
+    //   const userData = await checkIfUserIsValid();
 
-      if (!userData) {
-        history.push('/login');
-        return { currentUser: null, fetchUserInfo: getUserInfo };
-      }
+    //   if (!userData) {
+    //     history.push('/login');
+    //     return { currentUser: null, fetchUserInfo: getUserInfo };
+    //   }
 
-      const savedTheme = localStorage.getItem(RPM_THEME_STORAGE_KEY) || 'light';
+    //   const savedTheme = localStorage.getItem(RPM_THEME_STORAGE_KEY) || 'light';
 
-      return {
-        currentUser: userData,
-        fetchUserInfo: getUserInfo,
-        theme: savedTheme,
-      };
-    }
+    //   return {
+    //     currentUser: userData,
+    //     fetchUserInfo: getUserInfo,
+    //     theme: savedTheme,
+    //   };
+    // }
   } catch (error) {
     console.log('??????????>>>>>error', error);
   }
@@ -85,9 +86,9 @@ export const layout: RunTimeLayoutConfig = ({
   const queryClient = new QueryClient();
   return {
     logo: ` ${logo}`,
-    title: 'Event Management Portal',
+    title: 'Lango Pass',
     layout: 'mix',
-    colorPrimary: '#0466C8',
+    colorPrimary: '#D48806',
     navTheme: initialState?.theme || 'light',
     menu: {
       locale: false,
@@ -151,7 +152,7 @@ export const layout: RunTimeLayoutConfig = ({
             paddingBlockStart: 12,
           }}
         >
-          <div>© Build: {process.env.COMMIT_HASH}</div>
+          {/* <div>© Build: {process.env.COMMIT_HASH}</div> */}
         </div>
       );
     },
@@ -181,8 +182,9 @@ export const layout: RunTimeLayoutConfig = ({
           },
           {
             key: '5',
-            label: `${initialState?.theme === 'realDark' ? 'Light' : 'Dark'
-              } Mode`,
+            label: `${
+              initialState?.theme === 'realDark' ? 'Light' : 'Dark'
+            } Mode`,
             icon:
               initialState?.theme === 'realDark' ? (
                 <SunOutlined />
@@ -203,7 +205,6 @@ export const layout: RunTimeLayoutConfig = ({
             },
           },
         ];
-
 
         const NotificationMenu = () => (
           <Menu

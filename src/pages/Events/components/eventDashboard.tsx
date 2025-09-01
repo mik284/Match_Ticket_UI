@@ -20,7 +20,7 @@ import {
   YAxis,
 } from 'recharts';
 
-const Dashboard = () => {
+const EventDashboard = () => {
   // Revenue over time data
   const revenueData = [
     { month: 'J', value: 400 },
@@ -454,4 +454,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default EventDashboard;

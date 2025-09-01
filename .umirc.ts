@@ -8,7 +8,7 @@ export default defineConfig({
   },
   esbuildMinifyIIFE: true,
   define: {
-    BASE_URL: 'https://api.property.reliatech.co.ke',
+    BASE_URL: 'https://match-ticketing.c2.tracom.dev',
     // BASE_URL: 'http://localhost:5000',
     'process.env.COMMIT_HASH': process.env.COMMIT_HASH || '',
   },
@@ -52,55 +52,26 @@ export default defineConfig({
       name: 'Events',
       icon: 'CalendarOutlined',
       path: '/events',
-      // component: './Events',
+      component: './Events',
+    },
+    {
+      name: 'Events',
+      path: '/events/:id',
+      component: './Events/eventDetails',
+      hideInMenu: true,
     },
     {
       name: 'Venues',
       icon: 'HomeOutlined',
       path: '/venues',
-      // component: './Venues',
-      routes: [
-        {
-          name: 'All Venues',
-          path: '/venues',
-          // component: './Venues',
-        },
-    ],
+      component: './Venues',
     },
     {
-      name: 'Seats Layouts',
-      icon: 'LayoutOutlined',
-      path: '/seats-layouts',
-      // component: './SeatsLayouts',
-    },
-
-    {
-      name: 'Tickets',
-      icon: 'TagOutlined',
-      path: '/tickets',
-      // component: './Tickets',
-      routes: [
-        {
-          name: 'All Tickets',
-          path: '/tickets/all',
-          // component: './Tickets',
-        },
-        {
-          name: 'Ticket History',
-          path: '/tickets/:id/history',
-          // component: './TicketHistory',
-        },
-        {
-          name: 'Ticket Sales',
-          path: '/tickets/:id/sales',
-          // component: './TicketSales',
-        },
-        {
-          name: 'Ticket Reports',
-          path: '/tickets/:id/reports',
-          // component: './TicketReports',
-        },
-      ],
+      name: 'Venues',
+      icon: 'HomeOutlined',
+      path: '/venues/:id',
+      component: './Venues/venueDetails',
+      hideInMenu: true,
     },
     {
       name: 'Promo',
@@ -109,29 +80,16 @@ export default defineConfig({
       // component: './Promo',
     },
     {
-      name: 'Sales',
-      path: '/sales',
-      icon: 'DollarOutlined',
-      component: './Sales',
-    },
-    {
       name: 'Reports',
       path: '/reports',
       icon: 'BarChartOutlined',
       component: './Reports',
     },
     {
-      name: 'Settings',
-      path: '/settings',
-      icon: 'SettingOutlined',
-      // component: './Settings',
-      routes: [
-        {
-          name: 'Users',
-          path: '/settings/users',
-          icon: 'UserOutlined',
-          component: './Users',
-        },]
+      name: 'Users',
+      path: '/settings/users',
+      icon: 'UserOutlined',
+      component: './Users',
     },
     {
       name: 'Account',
