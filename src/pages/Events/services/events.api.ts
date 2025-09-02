@@ -1,4 +1,4 @@
-import { asyncFetchData } from '@/utils/graphqlUtils';
+import { asyncFetchData, mutationHandler } from '@/utils/graphqlUtils';
 import { gql } from 'graphql-request';
 
 export const getEvents = (params) => {
@@ -38,4 +38,16 @@ export const getEvents = (params) => {
       },
     },
   });
+};
+
+export const createEventWithTicketTypes = (values) => {
+  const createEventMutation = gql`
+    mutation createEventWithTicketTypes($input: EventWithTicketTypesInput!) {
+      createEventWithTicketTypes(eventWithTicketTypes: $input) {
+        message
+        success
+      }
+    }
+  `;
+  return mutationHandler(values, createEventMutation);
 };

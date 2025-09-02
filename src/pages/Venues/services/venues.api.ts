@@ -1,4 +1,4 @@
-import { asyncFetchData } from '@/utils/graphqlUtils';
+import { asyncFetchData, mutationHandler } from '@/utils/graphqlUtils';
 import { gql } from 'graphql-request';
 
 export const getAllVenues = (params) => {
@@ -35,4 +35,16 @@ export const getAllVenues = (params) => {
       },
     },
   });
+};
+
+export const createEventWithTicketTypes = (values) => {
+  const createVenueMutation = gql`
+    mutation createVenueWithSections($input: VenueWithSectionsInput) {
+      createVenueWithSections(venueWithSections: $input) {
+        message
+        success
+      }
+    }
+  `;
+  return mutationHandler(values, createVenueMutation);
 };

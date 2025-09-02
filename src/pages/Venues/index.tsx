@@ -1,5 +1,5 @@
 import ProTableComponent from '@/components/ProTableComponent';
-import { getAllVenues } from '@/services/venues.api';
+import { getAllVenues } from '@/pages/Venues/services/venues.api';
 import { EyeOutlined } from '@ant-design/icons';
 import { Link } from '@umijs/max';
 import { Button, Image } from 'antd';

@@ -1,9 +1,11 @@
 import ProTableComponent from '@/components/ProTableComponent';
-import { getUsers } from '@/services/users.api';
+import { getUsers } from '@/pages/Users/services/users.api';
+import AddEditUser from './components/AddEditUser';
 
 function Users() {
   const columns = [
-    { title: 'User Name', dataIndex: 'name', key: 'name' },
+    { title: 'User Name', dataIndex: 'username', key: 'username' },
+    { title: 'Phone Number', dataIndex: 'phone', key: 'phone' },
     { title: 'Email', dataIndex: 'email', key: 'email' },
   ];
 
@@ -27,6 +29,7 @@ function Users() {
         }
       }}
       columns={columns}
+      toolBarRender={() => [<AddEditUser />]}
       rowKey={'id'}
     />
   );

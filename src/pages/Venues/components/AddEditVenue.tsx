@@ -1,3 +1,4 @@
+import LocationPicker from '@/components/LocationPicker';
 import { PlusOutlined } from '@ant-design/icons';
 import {
   ModalForm,
@@ -11,7 +12,7 @@ import {
 } from '@ant-design/pro-components';
 import { Button, Col, Divider, message, Row } from 'antd';
 
-const CreateEventForm = () => {
+const AddEditVenue = () => {
   const eventCategories = [
     { label: 'Sport', value: 'Sport' },
     { label: 'Music', value: 'Music' },
@@ -114,7 +115,6 @@ const CreateEventForm = () => {
                 rules={[{ required: true, message: 'Please enter Venue name' }]}
               />
             </Col>
-
             <Col span={8}>
               <ProFormText
                 name="town"
@@ -127,22 +127,6 @@ const CreateEventForm = () => {
               />
             </Col>
             <Col span={8}>
-              <ProFormText
-                name="venueName"
-                width={'md'}
-                label={'Geographical Location'}
-                placeholder="Enter Venue Geographical Location"
-                rules={[
-                  { required: true, message: 'Please enter Venue Location' },
-                ]}
-              />
-            </Col>
-          </Row>
-        </ProFormGroup>
-
-        <ProFormGroup style={{ marginTop: '16px' }}>
-          <Row gutter={[16, 8]}>
-            <Col span={8}>
               <ProFormDigit
                 width={'md'}
                 name="venue"
@@ -153,6 +137,11 @@ const CreateEventForm = () => {
                 ]}
               />
             </Col>
+          </Row>
+        </ProFormGroup>
+
+        <ProFormGroup style={{ marginTop: '16px' }}>
+          <Row gutter={[16, 8]}>
             <Col span={8}>
               <ProFormDigit
                 width={'md'}
@@ -201,6 +190,8 @@ const CreateEventForm = () => {
             </Col>
           </Row>
         </ProFormGroup>
+
+        <LocationPicker />
 
         <Divider style={{ margin: '32px 0 24px 0' }} />
 
@@ -264,4 +255,4 @@ const CreateEventForm = () => {
   );
 };
 
-export default CreateEventForm;
+export default AddEditVenue;

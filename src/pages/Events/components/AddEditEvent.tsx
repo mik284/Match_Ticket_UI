@@ -1,3 +1,4 @@
+import { getAllVenues } from '@/pages/Venues/services/venues.api';
 import {
   ModalForm,
   ProFormDatePicker,
@@ -10,24 +11,16 @@ import {
   ProFormTimePicker,
 } from '@ant-design/pro-components';
 import { Button, Col, Row } from 'antd';
-import React, { useState } from 'react';
+import React from 'react';
 
 const AddEditEvent: React.FC = () => {
-  const [open, setOpen] = useState(false);
-
   return (
     <>
-      <Button type="primary" onClick={() => setOpen(true)}>
-        Create Event
-      </Button>
-
       <ModalForm
         title="Create Event"
-        open={open}
         modalProps={{
           width: 1000,
           destroyOnClose: true,
-          onCancel: () => setOpen(false),
           styles: {
             body: { padding: '24px' },
             header: { borderBottom: '1px solid #f0f0f0', marginBottom: '24px' },
@@ -35,9 +28,10 @@ const AddEditEvent: React.FC = () => {
         }}
         onFinish={async (values) => {
           console.log('Form Values:', values);
-          setOpen(false);
-          return true;
+
+          // return true;
         }}
+        trigger={<Button type="primary">Create Event</Button>}
         submitter={{
           searchConfig: {
             submitText: 'Save Details',
@@ -55,9 +49,12 @@ const AddEditEvent: React.FC = () => {
                 width={'md'}
                 placeholder="Select category"
                 options={[
-                  { label: 'Sport', value: 'sport' },
-                  { label: 'Music', value: 'music' },
-                  { label: 'Conference', value: 'conference' },
+                  { label: 'Sports', value: 'SPORTS' },
+                  { label: 'Film', value: 'FILM' },
+                  { label: 'Other', value: 'OTHER' },
+                  { label: 'theatre', value: 'THEATRE' },
+                  { label: 'Concerts', value: 'CONCERT' },
+                  { label: 'Music', value: 'MUSIC' },
                 ]}
                 rules={[
                   { required: true, message: 'Please select event category' },
@@ -75,14 +72,21 @@ const AddEditEvent: React.FC = () => {
             </Col>
             <Col span={8}>
               <ProFormSelect
-                name="venue"
+                name="venueId"
                 width={'md'}
                 label="Venue"
                 placeholder="Select venue"
-                options={[
-                  { label: 'Kasarani Stadium', value: 'kasarani' },
-                  { label: 'Nyayo Stadium', value: 'nyayo' },
-                ]}
+                request={async (params) => {
+                  try {
+                    const data = await getAllVenues({ name: params.keywords });
+                    return data?.getAllVenues?.venues.map((venue) => {
+                      return { label: venue.name, value: venue.id };
+                    });
+                  } catch (e) {
+                    console.log(e);
+                    return false;
+                  }
+                }}
                 rules={[{ required: true, message: 'Please select venue' }]}
               />
             </Col>

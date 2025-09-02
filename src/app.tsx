@@ -18,6 +18,7 @@ import {
 import { PageContainer } from '@ant-design/pro-components';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { history, RunTimeLayoutConfig } from '@umijs/max';
+import { APIProvider } from '@vis.gl/react-google-maps';
 import {
   Avatar,
   Breadcrumb,
@@ -30,19 +31,18 @@ import {
   Typography,
 } from 'antd';
 import Loading from './loading';
-import { getUserInfo } from './services/auth.api';
 import { toggleTheme } from './utils/toggleTheme';
 import logo from '/public/assets/images/icon.png';
 
-const checkIfUserIsValid = async () => {
-  try {
-    const userData = await getUserInfo();
-    return userData;
-  } catch (e) {
-    localStorage.removeItem('property_token');
-    return null;
-  }
-};
+// const checkIfUserIsValid = async () => {
+//   try {
+//     const userData = await getUserInfo();
+//     return userData;
+//   } catch (e) {
+//     localStorage.removeItem('property_token');
+//     return null;
+//   }
+// };
 
 const handleLogout = () => {
   // Clear the token from localStorage
@@ -98,49 +98,51 @@ export const layout: RunTimeLayoutConfig = ({
         return <Loading />;
       }
       return (
-        <QueryClientProvider client={queryClient}>
-          {history.location.pathname === '/login' ? (
-            <>{children}</>
-          ) : (
-            <PageContainer
-              header={{
-                extra: [
-                  <Space key="headerActions" size="middle">
-                    <Breadcrumb key="breadcrumb">
-                      <Breadcrumb.Item>
-                        <DashboardOutlined />
-                        <span>Dashboard</span>
-                      </Breadcrumb.Item>
-                      <Breadcrumb.Item>
-                        <GoldOutlined />
-                        <span>Events</span>
-                      </Breadcrumb.Item>
-                      <Breadcrumb.Item>
-                        <ContainerOutlined />
-                        <span>Tickets</span>
-                      </Breadcrumb.Item>
-                    </Breadcrumb>
-                  </Space>,
-                ],
-              }}
-            >
-              {children}
-              <Space
-                key="footerActions"
-                size="middle"
-                className="flex items-center justify-center gap-4 align-center mt-4"
-                aria-label="User Actions"
+        <APIProvider apiKey={GOOGLE_KEY}>
+          <QueryClientProvider client={queryClient}>
+            {history.location.pathname === '/login' ? (
+              <>{children}</>
+            ) : (
+              <PageContainer
+                header={{
+                  extra: [
+                    <Space key="headerActions" size="middle">
+                      <Breadcrumb key="breadcrumb">
+                        <Breadcrumb.Item>
+                          <DashboardOutlined />
+                          <span>Dashboard</span>
+                        </Breadcrumb.Item>
+                        <Breadcrumb.Item>
+                          <GoldOutlined />
+                          <span>Events</span>
+                        </Breadcrumb.Item>
+                        <Breadcrumb.Item>
+                          <ContainerOutlined />
+                          <span>Tickets</span>
+                        </Breadcrumb.Item>
+                      </Breadcrumb>
+                    </Space>,
+                  ],
+                }}
               >
-                <Typography.Text
-                  key="footer"
-                  className="text-center text-gray-500 text-xs mt-4"
+                {children}
+                <Space
+                  key="footerActions"
+                  size="middle"
+                  className="flex items-center justify-center gap-4 align-center mt-4"
+                  aria-label="User Actions"
                 >
-                  © {new Date().getFullYear()} Powered by Tracom Services Ltd.
-                </Typography.Text>
-              </Space>
-            </PageContainer>
-          )}
-        </QueryClientProvider>
+                  <Typography.Text
+                    key="footer"
+                    className="text-center text-gray-500 text-xs mt-4"
+                  >
+                    © {new Date().getFullYear()} Powered by Tracom Services Ltd.
+                  </Typography.Text>
+                </Space>
+              </PageContainer>
+            )}
+          </QueryClientProvider>
+        </APIProvider>
       );
     },
     menuFooterRender: (props) => {
@@ -250,7 +252,7 @@ export const layout: RunTimeLayoutConfig = ({
             aria-label="User Actions"
           >
             {/* notification dropdown */}
-            <Dropdown
+            {/* <Dropdown
               dropdownRender={() => <NotificationMenu />}
               trigger={['hover']}
               placement="bottomRight"
@@ -271,7 +273,7 @@ export const layout: RunTimeLayoutConfig = ({
                 />
                 Notifications
               </Button>
-            </Dropdown>
+            </Dropdown> */}
 
             {/* Quick Create Dropdown */}
             <Dropdown

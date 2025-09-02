@@ -9,6 +9,7 @@ export default defineConfig({
   esbuildMinifyIIFE: true,
   define: {
     BASE_URL: 'https://match-ticketing.c2.tracom.dev',
+    GOOGLE_KEY: "AIzaSyASHZOVlv8dzcTbkxl1wGPBLtU0yKBHicM",
     // BASE_URL: 'http://localhost:5000',
     'process.env.COMMIT_HASH': process.env.COMMIT_HASH || '',
   },
@@ -40,26 +41,22 @@ export default defineConfig({
       name: 'Login',
       path: '/login',
       layout: false,
-      component: '@/pages/Login',
+      component: '@/pages/Authentication/Login',
     },
+    {
+      name: 'OTP',
+      path: '/otp',
+      layout: false,
+      component: '@/pages/Authentication/OTP',
+    },
+
     {
       name: 'Dashboard',
       path: '/dashboard',
       icon: 'DashboardOutlined',
       component: './Dashboard',
     },
-    {
-      name: 'Events',
-      icon: 'CalendarOutlined',
-      path: '/events',
-      component: './Events',
-    },
-    {
-      name: 'Events',
-      path: '/events/:id',
-      component: './Events/eventDetails',
-      hideInMenu: true,
-    },
+
     {
       name: 'Venues',
       icon: 'HomeOutlined',
@@ -71,6 +68,18 @@ export default defineConfig({
       icon: 'HomeOutlined',
       path: '/venues/:id',
       component: './Venues/venueDetails',
+      hideInMenu: true,
+    },
+    {
+      name: 'Events',
+      icon: 'CalendarOutlined',
+      path: '/events',
+      component: './Events',
+    },
+    {
+      name: 'Events',
+      path: '/events/:id',
+      component: './Events/eventDetails',
       hideInMenu: true,
     },
     {
@@ -90,13 +99,6 @@ export default defineConfig({
       path: '/settings/users',
       icon: 'UserOutlined',
       component: './Users',
-    },
-    {
-      name: 'Account',
-      path: '/delete-account',
-      icon: 'UserOutlined',
-      layout: false,
-      component: './AccountDeletion',
     },
     // {
     //   name: 'Lock Screen',
