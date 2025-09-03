@@ -1,19 +1,15 @@
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { Modal } from 'antd/lib';
+import { Modal } from 'antd';
 
 const { confirm } = Modal;
 
-const ShowConfirm = (props: {
-  title: string;
-  position?: boolean;
-  cancelText?: string;
-}) => {
-  return new Promise((resolve) => {
+const showConfirm = (props) => {
+  return new Promise((resolve, reject) => {
     confirm({
       icon: <ExclamationCircleOutlined />,
       content: props.title,
-      centered: props.position,
-      cancelText: props?.cancelText,
+      okButtonProps: { style: { backgroundColor: '#D48806' } },
+      okText: 'Yes',
       onOk() {
         resolve(true);
       },
@@ -24,4 +20,4 @@ const ShowConfirm = (props: {
   });
 };
 
-export default ShowConfirm;
+export default showConfirm;

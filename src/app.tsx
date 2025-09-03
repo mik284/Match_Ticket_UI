@@ -165,7 +165,7 @@ export const layout: RunTimeLayoutConfig = ({
         const accountItems: MenuProps['items'] = [
           {
             key: '1',
-            label: 'My Account',
+            label: 'User',
             icon: <UserOutlined />,
             onClick: () => {
               history.push('/profile');
@@ -304,11 +304,7 @@ export const layout: RunTimeLayoutConfig = ({
               overlayClassName="user-account-dropdown"
               placement="bottomRight"
             >
-              <span
-                aria-label="User Account"
-                title="User Account"
-                className="flex items-center cursor-pointer rounded-md p-2 gap-2 transition-colors"
-              >
+              <Space>
                 {initialState?.avatar ? (
                   <Avatar
                     src={initialState.avatar}
@@ -338,17 +334,14 @@ export const layout: RunTimeLayoutConfig = ({
                     ellipsis={{ tooltip: initialState?.currentUser?.username }}
                     strong
                   >
-                    {initialState?.currentUser?.username || 'My Account'}
+                    {initialState?.currentUser?.username || 'User'}
                   </Typography.Text>
                 </Flex>
-              </span>
+              </Space>
             </Dropdown>
           </Flex>
         );
       },
     },
-    // onPageChange: () => {
-    //   return true;
-    // },
   };
 };

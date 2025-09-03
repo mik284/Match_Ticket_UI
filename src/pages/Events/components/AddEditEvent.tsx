@@ -12,8 +12,12 @@ import {
 } from '@ant-design/pro-components';
 import { Button, Col, Row } from 'antd';
 import React from 'react';
+import { getAllSections } from '../services/events.api';
 
-const AddEditEvent: React.FC = () => {
+const AddEditEvent: React.FC = ({ venue }) => {
+  const [selectedVenue, setSelectedVenue] = React.useState(
+    venue ? venue.id : null,
+  );
   return (
     <>
       <ModalForm
@@ -75,6 +79,11 @@ const AddEditEvent: React.FC = () => {
                 name="venueId"
                 width={'md'}
                 label="Venue"
+                initialValue={
+                  venue ? { value: venue.id, label: venue.name } : null
+                }
+                disabled={!!venue}
+                fieldProps={{ onSelect: (value) => setSelectedVenue(value) }}
                 placeholder="Select venue"
                 request={async (params) => {
                   try {
@@ -133,14 +142,6 @@ const AddEditEvent: React.FC = () => {
           creatorButtonProps={{
             creatorButtonText: 'Add Tickets Types',
           }}
-          initialValue={[
-            {
-              ticketName: 'Regular',
-              price: 250,
-              quantity: 2000,
-              section: 'wingA',
-            },
-          ]}
         >
           <ProFormGroup key="ticket">
             <ProFormText
@@ -163,12 +164,17 @@ const AddEditEvent: React.FC = () => {
               name="section"
               label="Venue Section"
               placeholder="Select section"
+              disabled={!selectedVenue}
+              params={{ venueId: selectedVenue }}
+              dependencies={['venueId']}
               width="xs"
-              options={[
-                { label: 'Wing A', value: 'wingA' },
-                { label: 'Wing B', value: 'wingB' },
-                { label: 'VIP', value: 'vip' },
-              ]}
+              request={async () => {
+                if (!selectedVenue) return;
+                const data = await getAllSections({ venueId: selectedVenue });
+                return data?.getAllSections?.sections.map((section) => {
+                  return { label: section.name, value: section.id };
+                });
+              }}
               rules={[{ required: true, message: 'Select section' }]}
             />
           </ProFormGroup>

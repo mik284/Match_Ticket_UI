@@ -1,3 +1,8 @@
+import showConfirm from '@/components/ModalConfirm';
+import Notification from '@/components/Notification';
+import { PhoneInput } from '@/components/Phonenumber';
+import { getPhoneNumber } from '@/components/Phonenumber/formatPhoneNumberUtil';
+
 import {
   ModalForm,
   ProFormGroup,
@@ -6,19 +11,61 @@ import {
 } from '@ant-design/pro-components';
 import { Button } from 'antd';
 import React from 'react';
+import { createUser } from '../../services/users.api';
 
-const AddEditUser: React.FC = () => {
+const AddEditUser: React.FC = ({ isEdit }) => {
   return (
     <>
       <ModalForm
-        title="Create User"
-        trigger={<Button type="primary">Create User</Button>}
+        title={isEdit ? 'Edit User' : 'Create User'}
+        trigger={
+          <Button type="primary">{isEdit ? 'Edit User' : 'Create User'}</Button>
+        }
         modalProps={{
           destroyOnClose: true,
         }}
         onFinish={async (values) => {
-          console.log('Form Values:', values);
-          return true;
+          const confirmed = await showConfirm({
+            title: isEdit
+              ? 'Are you sure you want to edit user?'
+              : 'Are you sure you want to create a user?',
+          });
+          if (confirmed) {
+            if (isEdit) {
+              console.log('edit user');
+              try {
+                const response = await createUser({
+                  ...values,
+                  phone: getPhoneNumber(values.phone),
+                });
+                Notification({
+                  type: 'success',
+                  message: response?.createUser?.message,
+                });
+                console.log('=========>>>>>', response);
+                return true;
+              } catch (e) {
+                console.log(e);
+              }
+              return true;
+            }
+            try {
+              const response = await createUser({
+                ...values,
+                phone: getPhoneNumber(values.phone),
+              });
+              Notification({
+                type: 'success',
+                message: response?.createUser?.message,
+              });
+              console.log('=========>>>>>', response);
+              return true;
+            } catch (e) {
+              console.log(e);
+            }
+          }
+
+          // return true;
         }}
         submitter={{
           searchConfig: {
@@ -36,13 +83,7 @@ const AddEditUser: React.FC = () => {
             placeholder="Joe Doe"
             rules={[{ required: true, message: 'Please enter user name' }]}
           />
-          <ProFormText
-            name="phone"
-            width="md"
-            label="Phone Number"
-            placeholder="+254789000000"
-            rules={[{ required: true, message: 'Please enter phone number' }]}
-          />
+          <PhoneInput name="phone" label="Phone Number" width="md" />
         </ProFormGroup>
 
         <ProFormGroup>
@@ -57,36 +98,14 @@ const AddEditUser: React.FC = () => {
             ]}
           />
           <ProFormSelect
-            name="idType"
-            label="ID Type"
-            width="md"
-            placeholder="Select ID Type"
-            options={[
-              { label: 'National ID', value: 'national_id' },
-              { label: 'Passport', value: 'passport' },
-              { label: 'Driver’s License', value: 'drivers_license' },
-            ]}
-            rules={[{ required: true, message: 'Please select ID type' }]}
-          />
-        </ProFormGroup>
-
-        <ProFormGroup>
-          <ProFormText
-            name="idNumber"
-            label="ID Number"
-            width="md"
-            placeholder="37658900"
-            rules={[{ required: true, message: 'Please enter ID number' }]}
-          />
-          <ProFormSelect
             name="role"
             label="Role"
             width="md"
             placeholder="Select role"
             options={[
-              { label: 'Admin', value: 'admin' },
-              { label: 'Editor', value: 'editor' },
-              { label: 'User', value: 'user' },
+              { label: 'Admin', value: 'ADMIN' },
+              { label: 'Organizer', value: 'ORGANIZER' },
+              { label: 'Validator', value: 'VALIDATOR' },
             ]}
             rules={[{ required: true, message: 'Please select role' }]}
           />

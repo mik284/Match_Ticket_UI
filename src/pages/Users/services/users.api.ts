@@ -1,25 +1,25 @@
-import { asyncFetchData } from '@/utils/graphqlUtils';
+import { asyncFetchData, mutationHandler } from '@/utils/graphqlUtils';
 import { gql } from 'graphql-request';
 
 export const getUsers = (params) => {
   const { pageSize, current, ...filters } = params;
 
   const getAllUsersQuery = gql`
-  query getAllUsers($input:UserFilter){
-  getAllUsers(filter:$input){
-    resourceName
-    schemaName
-    success
-    total
-    users{
-      email
-      id
-      phone
-      username
-      role
+    query getAllUsers($input: UserFilter) {
+      getAllUsers(filter: $input) {
+        resourceName
+        schemaName
+        success
+        total
+        users {
+          email
+          id
+          phone
+          username
+          role
+        }
+      }
     }
-  }
-}
   `;
   return asyncFetchData({
     query: getAllUsersQuery,
@@ -31,4 +31,23 @@ export const getUsers = (params) => {
       },
     },
   });
+};
+
+export const createUser = async (values) => {
+  const createUserMutation = gql`
+    mutation createUser($input: UserInput!) {
+      createUser(input: $input) {
+        message
+        success
+      }
+    }
+  `;
+  return mutationHandler(values, createUserMutation);
+};
+
+export const editUser = async (values) => {
+  const editUserMutation = gql`
+
+  `;
+  return mutationHandler(values, editUserMutation);
 };

@@ -1,11 +1,16 @@
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import showConfirm from '@/components/ModalConfirm';
+import Notification from '@/components/Notification';
+import { LockOutlined } from '@ant-design/icons';
 import { ProForm, ProFormText } from '@ant-design/pro-components';
+import { useSearchParams } from '@umijs/max';
 import { Typography } from 'antd';
-import { loginUser } from '../services/auth.api';
+import { changePassword } from '../services/auth.api';
 import bgImage from '/public/assets/images/football.jpg';
 import logo from '/public/assets/images/icon.png';
 
-const LoginPage = () => {
+const ChangePasswordPage = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   return (
     <div className="flex h-screen bg-gray-50">
       <div className="flex flex-1 overflow-hidden">
@@ -24,24 +29,35 @@ const LoginPage = () => {
               </Typography.Title>
             </div>
 
-            {/* Login Form */}
+            {/* Change Password Form */}
             <ProForm
               onFinish={async (values) => {
                 console.log('Form values:', values);
-                try {
-                  const response = await loginUser({
-                    ...values,
-                    context: 'admin',
-                  });
-                  console.log('response', response);
-                  return true;
-                } catch (error) {
-                  return false;
+                if (values.newPassword !== values.confirmPassword) {
+                  return false; // Prevent submission if mismatch
+                }
+                const confirmed = await showConfirm({
+                  title: 'Are you sure you want to reset your password?',
+                });
+                if (confirmed) {
+                  try {
+                    const response = await changePassword({
+                      newPassword: values.newPassword,
+                      token: searchParams.get('token'),
+                    });
+                    Notification({
+                      type: 'success',
+                      message: response?.createUser?.message,
+                    });
+                    console.log('response', response);
+                    return true;
+                  } catch (error) {
+                    return false;
+                  }
                 }
               }}
               submitter={{
-                searchConfig: { submitText: 'Sign In' },
-
+                searchConfig: { submitText: 'Change Password' },
                 render: (_, dom) => dom[1],
                 submitButtonProps: {
                   size: 'large',
@@ -52,41 +68,52 @@ const LoginPage = () => {
                     fontWeight: '600',
                     marginTop: '16px',
                   },
-                  loading: false,
                 },
               }}
             >
               <div className="space-y-6">
-                {/* Username Input */}
-                <ProFormText
-                  name="email"
-                  fieldProps={{
-                    size: 'large',
-                    prefix: <UserOutlined className="text-gray-400" />,
-                  }}
-                  placeholder="Email"
-                  rules={[
-                    { type: 'email', message: 'Please input your email!' },
-                    {
-                      required: true,
-                      message: 'Please input your Username!',
-                    },
-                  ]}
-                />
-
-                {/* Password Input */}
+                {/* New Password Input */}
                 <ProFormText.Password
-                  name="password"
+                  name="newPassword"
                   fieldProps={{
                     size: 'large',
                     prefix: <LockOutlined className="text-gray-400" />,
                   }}
-                  placeholder="Password"
+                  placeholder="New Password"
+                  label="New Password"
                   rules={[
                     {
                       required: true,
-                      message: 'Please input your password!',
+                      message: 'Please input your new password!',
                     },
+                  ]}
+                />
+
+                {/* Confirm Password Input */}
+                <ProFormText.Password
+                  name="confirmPassword"
+                  dependencies={['newPassword']}
+                  fieldProps={{
+                    size: 'large',
+                    prefix: <LockOutlined className="text-gray-400" />,
+                  }}
+                  placeholder="Confirm Password"
+                  label="Confirm Password"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please confirm your password!',
+                    },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (!value || getFieldValue('newPassword') === value) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject(
+                          new Error('Passwords do not match!'),
+                        );
+                      },
+                    }),
                   ]}
                 />
               </div>
@@ -107,7 +134,7 @@ const LoginPage = () => {
         </div>
 
         {/* Right Side - Background Image with Overlay */}
-        <div className="hidden lg:flex lg:w-full  relative items-center justify-center">
+        <div className="hidden lg:flex lg:w-full relative items-center justify-center">
           <img
             src={bgImage}
             alt="Background"
@@ -119,4 +146,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default ChangePasswordPage;

@@ -5,25 +5,31 @@ export const getAllVenues = (params) => {
   const { pageSize, current, ...filters } = params;
 
   const getVenuesQuery = gql`
-    query getAllVenues($input: VenueFilter) {
-      getAllVenues(filter: $input) {
-        resourceName
-        schemaName
-        success
-        total
-        venues {
-          capacity
-          address
-          city
-          imageUrl
-          id
-          latitude
-          longitude
-          name
-          parkingAvailable
-        }
+  query getAllVenues($input: VenueFilter) {
+  getAllVenues(filter: $input) {
+    resourceName
+    schemaName
+    success
+    total
+    venues {
+      capacity
+      address
+      city
+      imageUrl
+      id
+      latitude
+      longitude
+      name
+      parkingAvailable
+      sections {
+        capacity
+        gate
+        id
+        name
       }
     }
+  }
+}
   `;
   return asyncFetchData({
     query: getVenuesQuery,

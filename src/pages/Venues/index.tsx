@@ -3,9 +3,12 @@ import { getAllVenues } from '@/pages/Venues/services/venues.api';
 import { EyeOutlined } from '@ant-design/icons';
 import { Link } from '@umijs/max';
 import { Button, Image } from 'antd';
+import React from 'react';
 import AddEditVenue from './components/AddEditVenue';
 
 function Venues() {
+  const [venues, setVenues] = React.useState([]);
+
   const columns = [
     {
       title: 'Venue',
@@ -37,11 +40,17 @@ function Venues() {
     },
   ];
 
+  function selectedRowKeys(selectedRows: any) {
+    const selectedRow = venues.find((venue) => venue?.id === selectedRows[0]);
+    console.log('selectedRows', selectedRow);
+  }
+
   return (
     <ProTableComponent
       request={async (params) => {
         try {
           const data = await getAllVenues(params);
+          setVenues(data?.getAllVenues?.venues || []);
           return {
             data: data?.getAllVenues?.venues || [],
             success: data?.getAllVenues?.success || false,
@@ -59,6 +68,7 @@ function Venues() {
       rowKey={'id'}
       toolBarRender={() => [<AddEditVenue />]}
       columns={columns}
+      rowSelection={{ onChange: selectedRowKeys }}
     />
   );
 }

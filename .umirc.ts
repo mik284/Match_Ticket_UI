@@ -49,6 +49,12 @@ export default defineConfig({
       layout: false,
       component: '@/pages/Authentication/OTP',
     },
+    {
+      name: 'Change Password',
+      path: '/change-password',
+      layout: false,
+      component: '@/pages/Authentication/ChangePassword',
+    },
 
     {
       name: 'Dashboard',

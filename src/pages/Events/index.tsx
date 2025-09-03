@@ -5,11 +5,19 @@ import { Link } from '@umijs/max';
 import { Button } from 'antd';
 import AddEditEvent from './components/AddEditEvent';
 
-function Events() {
+function Events({ venue }) {
   const columns = [
     { title: 'Event Name', dataIndex: 'name', key: 'name' },
     { title: 'Category', dataIndex: 'category', key: 'category' },
     { title: 'Description', dataIndex: 'description', key: 'description' },
+    {
+      title: 'Venue',
+      dataIndex: 'venue',
+      key: 'venue',
+      render: (_, record) => (
+        <Link to={`/venues/${record.venue.id}`}>{record.venue.name}</Link>
+      ),
+    },
     {
       title: 'Event Date',
       dataIndex: 'date',
@@ -34,7 +42,9 @@ function Events() {
   return (
     <ProTableComponent
       request={async (params) => {
-        const data = await getEvents(params);
+        const data = await getEvents(
+          venue ? { venueId: venue.id, ...params } : params,
+        );
         return {
           data: data?.getAllEvents?.events || [],
           success: data?.getAllEvents?.success || false,
@@ -42,7 +52,7 @@ function Events() {
         };
       }}
       columns={columns}
-      toolBarRender={() => [<AddEditEvent />]}
+      toolBarRender={() => [<AddEditEvent venue={venue} />]}
       rowKey={'id'}
     />
   );

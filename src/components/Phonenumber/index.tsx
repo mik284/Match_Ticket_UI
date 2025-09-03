@@ -33,9 +33,12 @@ export const PhoneInput = (props) => {
       locale={en}
     >
       <Form.Item
+        initialValue={{
+          short: 'KE',
+        }}
         hasFeedback
         label={props?.label}
-        name="phoneNumber"
+        name={props?.name || 'phoneNumber'}
         rules={[
           {
             validator: async (_, value) => {

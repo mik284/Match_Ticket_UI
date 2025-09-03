@@ -2,8 +2,13 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { ProCard, ProDescriptions } from '@ant-design/pro-components';
 import { Button, Image, Space } from 'antd';
 import React from 'react';
+import Events from '../Events';
+import useVenue from './hooks/useVenue';
 
 const VenueDetails: React.FC = () => {
+  const { venue, isLoading } = useVenue();
+  console.log('data', venue);
+
   return (
     <ProCard
       title="Venue Details"
@@ -11,6 +16,7 @@ const VenueDetails: React.FC = () => {
       tabs={{
         type: 'card',
       }}
+      loading={isLoading}
       headerBordered
       bordered
     >
@@ -20,18 +26,14 @@ const VenueDetails: React.FC = () => {
           <ProCard title="Venue Information" bordered>
             <ProCard split="vertical" bordered>
               {/* Venue Image */}
-              <ProCard colSpan="300px" bordered>
-                <Image
-                  src="https://i0.wp.com/ghettoradio.co.ke/wp-content/uploads/2025/04/Kasarani-Stadium-Ready-for-Action.png?w=1200&ssl=1"
-                  width="100%"
-                />
+              <ProCard loading={isLoading} colSpan="300px" bordered>
+                <Image src={venue?.imageUrl} alt="Venue" width="100%" />
               </ProCard>
 
               {/* Venue Information */}
               <ProCard bordered>
                 <ProDescriptions
                   // column={2}
-
                   bordered
                   colon={false}
                   contentStyle={{ fontWeight: 600 }}
@@ -47,28 +49,25 @@ const VenueDetails: React.FC = () => {
                   }
                 >
                   <ProDescriptions.Item label="Name">
-                    Kasarani Stadium
+                    {venue?.name}
                   </ProDescriptions.Item>
                   <ProDescriptions.Item label="Parking Availability">
-                    Yes
+                    {venue?.parkingAvailable ? 'Yes' : 'No'}
                   </ProDescriptions.Item>
 
-                  <ProDescriptions.Item label="Town">
-                    Nairobi
-                  </ProDescriptions.Item>
-                  <ProDescriptions.Item label="No. of Gates">
-                    4
+                  <ProDescriptions.Item label="City / Town">
+                    {venue?.city}
                   </ProDescriptions.Item>
 
                   <ProDescriptions.Item label="Geographical Location">
-                    Nairobi
+                    {venue?.address}
                   </ProDescriptions.Item>
                   <ProDescriptions.Item label="Capacity Limit">
-                    60,000
+                    {venue?.capacity}
                   </ProDescriptions.Item>
-                  <ProDescriptions.Item label="Accessibility">
+                  {/* <ProDescriptions.Item label="Accessibility">
                     Wheel Chair
-                  </ProDescriptions.Item>
+                  </ProDescriptions.Item> */}
                 </ProDescriptions>
               </ProCard>
             </ProCard>
@@ -76,35 +75,32 @@ const VenueDetails: React.FC = () => {
 
           {/* Sections Details */}
           <ProCard title="Sections Details" bordered>
-            <ProDescriptions
-              column={3}
-              bordered
-              colon={false}
-              contentStyle={{ fontWeight: 600 }}
-            >
-              <ProDescriptions.Item label="Section Name">
-                Wing A
-              </ProDescriptions.Item>
-              <ProDescriptions.Item label="Capacity">250</ProDescriptions.Item>
-              <ProDescriptions.Item label="Gate">A</ProDescriptions.Item>
-            </ProDescriptions>
-            <ProDescriptions
-              column={3}
-              bordered
-              colon={false}
-              contentStyle={{ fontWeight: 600 }}
-            >
-              <ProDescriptions.Item label="Section Name">
-                Wing A
-              </ProDescriptions.Item>
-              <ProDescriptions.Item label="Capacity">250</ProDescriptions.Item>
-              <ProDescriptions.Item label="Gate">A</ProDescriptions.Item>
-            </ProDescriptions>
+            {venue?.sections?.map((section) => (
+              <ProDescriptions
+                style={{ marginBottom: '1rem' }}
+                column={3}
+                title={section?.name}
+                bordered
+                colon={false}
+                contentStyle={{ fontWeight: 600 }}
+                key={section.id}
+              >
+                <ProDescriptions.Item label="Section Name">
+                  {section?.name}
+                </ProDescriptions.Item>
+                <ProDescriptions.Item label="Capacity">
+                  {section?.capacity}
+                </ProDescriptions.Item>
+                <ProDescriptions.Item label="Gate">
+                  {section?.gate}
+                </ProDescriptions.Item>
+              </ProDescriptions>
+            ))}
           </ProCard>
         </Space>
       </ProCard.TabPane>
       <ProCard.TabPane key="tab2" tab="Venue Events">
-        Venue Events
+        <Events venue={venue} />
       </ProCard.TabPane>
     </ProCard>
   );
