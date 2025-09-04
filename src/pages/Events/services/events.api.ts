@@ -11,6 +11,7 @@ export const getEvents = (params) => {
           id
           date
           description
+          startTime
           endTime
           isActive
           isCancelled
@@ -19,6 +20,12 @@ export const getEvents = (params) => {
           venue {
             id
             name
+            sections {
+              capacity
+              gate
+              id
+              name
+            }
           }
         }
         total
@@ -42,20 +49,19 @@ export const getEvents = (params) => {
 export const getAllSections = (params) => {
   const { pageSize, current, ...filters } = params;
   const getAllSectionsQuery = gql`
-  query getAllSections($input:SectionFilter!){
-  getAllSections(filter:$input){
-    resourceName
-    schemaName
-    sections{
-      capacity
-      gate
-      id
-      name
-          }
-    total
-    
-  }
-}
+    query getAllSections($input: SectionFilter!) {
+      getAllSections(filter: $input) {
+        resourceName
+        schemaName
+        sections {
+          capacity
+          gate
+          id
+          name
+        }
+        total
+      }
+    }
   `;
   return asyncFetchData({
     query: getAllSectionsQuery,

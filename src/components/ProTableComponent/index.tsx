@@ -1,6 +1,10 @@
-import React from 'react';
-import ProTable, { ProTableProps, ActionType, ProColumns } from '@ant-design/pro-table';
+import ProTable, {
+  ActionType,
+  ProColumns,
+  ProTableProps,
+} from '@ant-design/pro-table';
 import { FormInstance } from 'antd';
+import React from 'react';
 
 // Define props type for your component
 type ProTableComponentProps<T = any, U = any> = {
@@ -25,7 +29,10 @@ type ProTableComponentProps<T = any, U = any> = {
   expandable?: ProTableProps<T, U>['expandable'];
 };
 
-const ProTableComponent = <T extends Record<string, any>, U extends Record<string, any>>(
+const ProTableComponent = <
+  T extends Record<string, any>,
+  U extends Record<string, any>,
+>(
   props: ProTableComponentProps<T, U>,
 ) => {
   return (
@@ -44,6 +51,7 @@ const ProTableComponent = <T extends Record<string, any>, U extends Record<strin
       rowKey={props.rowKey}
       pagination={{
         ...props.pagination,
+        pageSize: 10,
         pageSizeOptions: [
           '10',
           '20',

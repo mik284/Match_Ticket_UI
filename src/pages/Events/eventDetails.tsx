@@ -2,9 +2,13 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { ProCard, ProDescriptions } from '@ant-design/pro-components';
 import { Button, Space } from 'antd';
 import React from 'react';
-import EventDashboard from './components/eventDashboard';
+import Orders from './components/Orders';
+import Tickets from './components/Tickets';
+import useEvent from './hooks/useEvent';
 
 const EventDetails: React.FC = () => {
+  const { event, isLoading } = useEvent();
+  console.log('data', event);
   return (
     <ProCard
       title="Event Details"
@@ -14,6 +18,7 @@ const EventDetails: React.FC = () => {
       }}
       headerBordered
       bordered
+      loading={isLoading}
     >
       <ProCard.TabPane key="tab1" tab="Event Details">
         <Space direction="vertical" size="large" style={{ width: '100%' }}>
@@ -39,24 +44,21 @@ const EventDetails: React.FC = () => {
                   }
                 >
                   <ProDescriptions.Item label="Event Category">
-                    Sports
+                    {event?.category}
                   </ProDescriptions.Item>
                   <ProDescriptions.Item label="Venue">
-                    Kasarani Stadium
+                    {event?.venue?.name}
                   </ProDescriptions.Item>
 
                   <ProDescriptions.Item label="Event Name">
-                    Gor Mahia vs AFC Leopards
+                    {event?.name}
                   </ProDescriptions.Item>
                   <ProDescriptions.Item label="Time">
-                    25th Dec, 2024 - 3:00 PM
+                    {new Date(event?.date).toDateString()}
                   </ProDescriptions.Item>
 
                   <ProDescriptions.Item label="Description">
-                    Nairobi
-                  </ProDescriptions.Item>
-                  <ProDescriptions.Item label="Capacity Limit">
-                    60,000
+                    {event?.description}
                   </ProDescriptions.Item>
                 </ProDescriptions>
               </ProCard>
@@ -64,39 +66,38 @@ const EventDetails: React.FC = () => {
           </ProCard>
 
           {/* Sections Details */}
+
           <ProCard title="Sections Details" bordered>
-            <ProDescriptions
-              column={3}
-              bordered
-              colon={false}
-              contentStyle={{ fontWeight: 600 }}
-            >
-              <ProDescriptions.Item label="Section Name">
-                Wing A
-              </ProDescriptions.Item>
-              <ProDescriptions.Item label="Capacity">250</ProDescriptions.Item>
-              <ProDescriptions.Item label="Gate">A</ProDescriptions.Item>
-            </ProDescriptions>
-            <ProDescriptions
-              column={3}
-              bordered
-              colon={false}
-              contentStyle={{ fontWeight: 600 }}
-            >
-              <ProDescriptions.Item label="Section Name">
-                Wing A
-              </ProDescriptions.Item>
-              <ProDescriptions.Item label="Capacity">250</ProDescriptions.Item>
-              <ProDescriptions.Item label="Gate">A</ProDescriptions.Item>
-            </ProDescriptions>
+            {event?.venue?.sections?.map((section) => (
+              <ProDescriptions
+                column={3}
+                bordered
+                colon={false}
+                contentStyle={{ fontWeight: 600 }}
+                style={{ marginBottom: '1rem' }}
+              >
+                <ProDescriptions.Item label="Section Name">
+                  {section?.name}
+                </ProDescriptions.Item>
+                <ProDescriptions.Item label="Capacity">
+                  {section?.capacity}
+                </ProDescriptions.Item>
+                <ProDescriptions.Item label="Gate">
+                  {section?.gate}
+                </ProDescriptions.Item>
+              </ProDescriptions>
+            ))}
           </ProCard>
         </Space>
       </ProCard.TabPane>
-      <ProCard.TabPane key="tab3" tab="Event Dashboard">
+      {/* <ProCard.TabPane key="tab3" tab="Event Dashboard">
         <EventDashboard />
-      </ProCard.TabPane>
+      </ProCard.TabPane> */}
       <ProCard.TabPane key="tab2" tab="Event Tickets Sales">
-        Event Tickets
+        <Tickets eventId={event?.id} />
+      </ProCard.TabPane>
+      <ProCard.TabPane key="tab3" tab="Event Ticket orders">
+        <Orders eventId={event?.id} />
       </ProCard.TabPane>
     </ProCard>
   );

@@ -13,38 +13,6 @@ import {
 import { Button, Col, Divider, message, Row } from 'antd';
 
 const AddEditVenue = () => {
-  const eventCategories = [
-    { label: 'Sport', value: 'Sport' },
-    { label: 'Music', value: 'Music' },
-    { label: 'Conference', value: 'Conference' },
-    { label: 'Theater', value: 'Theater' },
-    { label: 'Comedy', value: 'Comedy' },
-    { label: 'Festival', value: 'Festival' },
-    { label: 'Workshop', value: 'Workshop' },
-    { label: 'Networking', value: 'Networking' },
-  ];
-
-  const venues = [
-    { label: 'Kasarani Stadium', value: 'Kasarani Stadium' },
-    { label: 'KICC', value: 'KICC' },
-    {
-      label: 'Kenyatta International Conference Centre',
-      value: 'Kenyatta International Conference Centre',
-    },
-    { label: 'Carnivore Grounds', value: 'Carnivore Grounds' },
-    { label: 'Uhuru Gardens', value: 'Uhuru Gardens' },
-    { label: 'Nairobi National Museum', value: 'Nairobi National Museum' },
-  ];
-
-  const sections = [
-    { label: 'Wing A', value: 'Wing A' },
-    { label: 'Wing B', value: 'Wing B' },
-    { label: 'VIP Section', value: 'VIP Section' },
-    { label: 'Regular Section', value: 'Regular Section' },
-    { label: 'Balcony', value: 'Balcony' },
-    { label: 'Ground Floor', value: 'Ground Floor' },
-  ];
-
   const handleSubmit = async (values) => {
     console.log('Form values:', values);
     message.success('Event created successfully!');
@@ -65,20 +33,6 @@ const AddEditVenue = () => {
             body: { padding: '24px' },
             header: { borderBottom: '1px solid #f0f0f0', marginBottom: '24px' },
           },
-        }}
-        initialValues={{
-          category: 'Sport',
-          eventName: 'Gor Mahia vs AFC Leopards',
-          description: 'The fiercest rivalry returns. Experienc...',
-          venue: 'Kasarani Stadium',
-          ticketTypes: [
-            {
-              name: 'Regular',
-              price: 'Kes 250',
-              quantity: '2000',
-              section: 'Wing A',
-            },
-          ],
         }}
         submitter={{
           searchConfig: {
@@ -199,7 +153,6 @@ const AddEditVenue = () => {
         <ProFormList
           name="ticketTypes"
           label="Configure Sections"
-          min={1}
           copyIconProps={false}
           alwaysShowItemLabel
           creatorButtonProps={{
@@ -207,14 +160,6 @@ const AddEditVenue = () => {
             icon: <PlusOutlined />,
             type: 'dashed',
           }}
-          initialValue={[
-            {
-              ticketName: 'Regular',
-              price: 250,
-              quantity: 2000,
-              section: 'wingA',
-            },
-          ]}
         >
           <Row gutter={16}>
             <Col span={8}>
